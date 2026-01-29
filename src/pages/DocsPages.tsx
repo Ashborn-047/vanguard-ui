@@ -76,12 +76,14 @@ const sidebarItems = [
         title: 'Core Concepts',
         items: [
             { id: 'themes', label: 'Themes & Aesthetics' },
+            { id: 'color-customization', label: 'Color Customization' },
             { id: 'utilities', label: 'Utility Functions' },
         ]
     },
     {
         title: 'Components',
         items: [
+            { id: 'theme-switcher', label: 'Theme Switcher' },
             { id: 'button', label: 'Button' },
             { id: 'card', label: 'Card' },
             { id: 'input', label: 'Input' },
@@ -121,6 +123,13 @@ export const IntegrationPage: React.FC<{ theme: Theme }> = ({ theme }) => {
         pnpm: 'pnpm add lucide-react clsx tailwind-merge framer-motion',
         bun: 'bun add lucide-react clsx tailwind-merge framer-motion',
         yarn: 'yarn add lucide-react clsx tailwind-merge framer-motion'
+    };
+
+    const themeCommands: Record<string, string> = {
+        npm: 'npx vanguard-ui theme --set glassmorphism',
+        pnpm: 'pnpm dlx vanguard-ui theme --set glassmorphism',
+        bun: 'bunx vanguard-ui theme --set glassmorphism',
+        yarn: 'yarn dlx vanguard-ui theme --set glassmorphism'
     };
 
     const PkgManagerTabs = () => (
@@ -171,95 +180,471 @@ export const IntegrationPage: React.FC<{ theme: Theme }> = ({ theme }) => {
 
             {/* Main Content */}
             <main className="flex-1 py-16 px-6 lg:px-12 max-w-4xl animate-in fade-in duration-700">
-                <div className="mb-12">
-                    <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Guides</p>
-                    <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Installation</h1>
-                    <p className={`text-xl opacity-60 font-medium ${theme.text}`}>The fastest way to get started is using our CLI to set up your design system.</p>
-                </div>
-
-                <div className="space-y-16">
-                    {/* CLI Installation */}
-                    <section className="space-y-8">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
-                                <Terminal size={20} />
-                            </div>
-                            <h3 className={`text-2xl font-bold ${theme.text}`}>1. Install CLI</h3>
+                {/* Introduction Section */}
+                {activeSection === 'introduction' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Getting Started</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Introduction</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Design systems that shift between realities. Welcome to Vanguard UI.</p>
                         </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Install the Vanguard CLI using your preferred package manager.</p>
-                        <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
-                            <PkgManagerTabs />
-                            <div className="p-5 bg-black/90 relative group">
-                                <div className="flex flex-col gap-1.5">
-                                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Command: Install CLI</span>
-                                    <code className="text-indigo-300 font-mono text-sm">{cliCommands[pkgManager]}</code>
+                        <div className="space-y-12">
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>What is Vanguard UI?</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    Vanguard UI is a theme-aware component library that lets you switch between 6 distinct design aesthetics at runtime.
+                                    Unlike traditional UI libraries, we focus on <strong>"Aesthetic States"</strong> - allowing your entire interface to transform
+                                    between Minimalism, Neo-Brutalism, Glassmorphism, Skeuomorphism, Claymorphism, and Liquid Glass.
+                                </p>
+                            </section>
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Philosophy</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    Every component is built with a <code className="bg-black/10 px-1 rounded">theme</code> prop.
+                                    Pass any theme object, and the component instantly adapts its colors, shadows, borders, and animations.
+                                </p>
+                            </section>
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Key Features</h2>
+                                <ul className={`space-y-3 opacity-70 ${theme.text}`}>
+                                    <li className="flex items-start gap-3"><span className="text-indigo-500">✦</span> <span><strong>6 Design Aesthetics</strong> - Switch between Minimalism, Neo-Brutalism, Glassmorphism, Skeuomorphism, Claymorphism, and Liquid Glass</span></li>
+                                    <li className="flex items-start gap-3"><span className="text-indigo-500">✦</span> <span><strong>44+ Components</strong> - Buttons, Cards, Inputs, Dialogs, Charts, and more</span></li>
+                                    <li className="flex items-start gap-3"><span className="text-indigo-500">✦</span> <span><strong>Copy-Paste Ready</strong> - Drop components directly into your project</span></li>
+                                    <li className="flex items-start gap-3"><span className="text-indigo-500">✦</span> <span><strong>Tailwind CSS</strong> - Built with Tailwind for maximum customization</span></li>
+                                </ul>
+                            </section>
+                        </div>
+                    </>
+                )}
+
+                {/* Themes Section */}
+                {activeSection === 'themes' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Core Concepts</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Themes & Aesthetics</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Understand the 6 design philosophies that power Vanguard UI.</p>
+                        </div>
+                        <div className="space-y-12">
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Available Themes</h2>
+                                <div className="grid gap-4">
+                                    {[
+                                        { name: 'minimalism', title: 'Minimalism', desc: 'Clean, content-first design with strict grids and heavy whitespace.' },
+                                        { name: 'neoBrutalism', title: 'Neo-Brutalism', desc: 'Raw, high-contrast aesthetic with hard shadows and bold colors.' },
+                                        { name: 'glassmorphism', title: 'Glassmorphism', desc: 'Frosted glass effect with blur, transparency, and vibrant backgrounds.' },
+                                        { name: 'skeuomorphism', title: 'Skeuomorphism', desc: 'Tactile, realistic design mimicking real-world materials.' },
+                                        { name: 'claymorphism', title: 'Claymorphism', desc: 'Soft, inflated 3D appearance with rounded shapes and inner shadows.' },
+                                        { name: 'liquidGlass', title: 'Liquid Glass', desc: 'Ultra-modern with high refraction, mesh gradients, and specular highlights.' },
+                                    ].map(t => (
+                                        <div key={t.name} className={`p-4 rounded-xl ${theme.card}`}>
+                                            <h3 className={`font-bold ${theme.text}`}>{t.title}</h3>
+                                            <p className={`text-sm opacity-60 ${theme.text}`}>{t.desc}</p>
+                                            <code className="text-xs bg-black/10 px-2 py-1 rounded mt-2 inline-block">{t.name}</code>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
-                        </div>
-                    </section>
+                            </section>
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Using Themes</h2>
+                                <CodeBlock theme={theme} label="Usage: themes.ts" code={`import { themes } from '@/styles/themes';
 
-                    {/* Initialize Project */}
-                    <section className="space-y-8">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
-                                <Settings2 size={20} />
-                            </div>
-                            <h3 className={`text-2xl font-bold ${theme.text}`}>2. Initialize Project</h3>
+// Use a specific theme
+const myTheme = themes.glassmorphism;
+
+// Pass to components
+<Button theme={myTheme}>Click Me</Button>
+<Card theme={myTheme}>Content</Card>`} />
+                            </section>
                         </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Setup your project's config, global CSS, and theme-system variables.</p>
-                        <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
-                            <PkgManagerTabs />
-                            <div className="p-5 bg-black/90 relative group">
-                                <div className="flex flex-col gap-1.5">
-                                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Command: Init</span>
-                                    <code className="text-indigo-300 font-mono text-sm">{initCommands[pkgManager]}</code>
+                    </>
+                )}
+
+                {/* Color Customization Section */}
+                {activeSection === 'color-customization' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Core Concepts</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Color Customization</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Define your own colors to match your brand identity.</p>
+                        </div>
+                        <div className="space-y-12">
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Custom Color Palette</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    Override the default theme colors with your own palette. Pass custom colors directly or use CSS variables.
+                                </p>
+                                <CodeBlock theme={theme} label="Custom Theme Colors" code={`// Create a custom theme with your brand colors
+import { themes } from '@/styles/themes';
+
+const myCustomTheme = {
+  ...themes.minimalism,  // Start with a base theme
+  
+  // Override with your brand colors
+  primaryButton: 'bg-[#FF6B35] hover:bg-[#E85A2A] text-white',
+  secondaryButton: 'bg-[#2E4057] hover:bg-[#1E3047] text-white',
+  accentButton: 'bg-[#4ECDC4] hover:bg-[#3DBDB5] text-white',
+  
+  // Customize card and input styles
+  card: 'bg-white/90 border border-[#2E4057]/10 rounded-xl',
+  input: 'bg-white border-2 border-[#2E4057]/20 focus:border-[#FF6B35]',
+};
+
+// Use your custom theme
+<Button theme={myCustomTheme}>Custom Styled</Button>`} />
+                            </section>
+
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>CLI Color Configuration</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    Use the CLI to set up a custom color palette for your project.
+                                </p>
+                                <CodeBlock theme={theme} label="CLI: Configure Colors" code={`# Set primary brand color
+npx vanguard-ui colors --primary "#FF6B35"
+
+# Set accent color  
+npx vanguard-ui colors --accent "#4ECDC4"
+
+# Set multiple colors at once
+npx vanguard-ui colors --primary "#FF6B35" --secondary "#2E4057" --accent "#4ECDC4"
+
+# Generate a complete palette from a single color
+npx vanguard-ui colors --generate "#FF6B35"`} />
+                            </section>
+
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>CSS Variables Approach</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    For maximum flexibility, use CSS custom properties to control colors globally.
+                                </p>
+                                <CodeBlock theme={theme} label="CSS Variables" code={`:root {
+  /* Your brand colors */
+  --color-primary: #FF6B35;
+  --color-secondary: #2E4057;
+  --color-accent: #4ECDC4;
+  
+  /* Derived colors (auto-generated or manual) */
+  --color-primary-hover: #E85A2A;
+  --color-primary-light: #FFE4D9;
+}
+
+/* Usage in components */
+.custom-button {
+  background-color: var(--color-primary);
+}
+.custom-button:hover {
+  background-color: var(--color-primary-hover);
+}`} />
+                            </section>
+
+                            <section className={`p-6 rounded-2xl border-l-4 border-indigo-500 bg-indigo-500/5`}>
+                                <p className={`text-sm ${theme.text}`}>
+                                    <strong>💡 Tip:</strong> When customizing colors, ensure sufficient contrast ratios for accessibility (WCAG 2.1 recommends 4.5:1 for normal text).
+                                </p>
+                            </section>
+                        </div>
+                    </>
+                )}
+
+                {/* Utilities Section */}
+                {activeSection === 'utilities' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Core Concepts</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Utility Functions</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Helper functions that power Vanguard's dynamic styling.</p>
+                        </div>
+                        <div className="space-y-12">
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>The cn() Function</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    The <code className="bg-black/10 px-1 rounded">cn()</code> utility merges Tailwind classes intelligently,
+                                    handling conflicts and conditionals. It combines <code className="bg-black/10 px-1 rounded">clsx</code> and <code className="bg-black/10 px-1 rounded">tailwind-merge</code>.
+                                </p>
+                                <CodeBlock theme={theme} label="lib/utils.ts" code={`import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}`} />
+                            </section>
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Example Usage</h2>
+                                <CodeBlock theme={theme} label="Example" code={`// Merge classes conditionally
+cn('px-4 py-2', isActive && 'bg-blue-500', 'hover:opacity-80')
+
+// Override conflicting classes
+cn('bg-red-500', 'bg-blue-500') // Results in 'bg-blue-500'`} />
+                            </section>
+                        </div>
+                    </>
+                )}
+
+                {/* Theme Switcher Component */}
+                {activeSection === 'theme-switcher' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Theme Switcher</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Switch between 6 design aesthetics at runtime.</p>
+                        </div>
+                        <div className="space-y-8">
+                            {/* Live Preview */}
+                            <section className="space-y-4">
+                                <h2 className={`text-xl font-bold ${theme.text}`}>Live Preview</h2>
+                                <div className={`p-6 rounded-2xl ${theme.card}`}>
+                                    <p className={`text-sm opacity-60 mb-4 ${theme.text}`}>Click any theme to see it applied:</p>
+                                    <div className="flex flex-wrap gap-3">
+                                        {[
+                                            { key: 'minimalism', label: 'Minimalism', color: 'bg-gray-100 text-gray-900 border-gray-300' },
+                                            { key: 'neoBrutalism', label: 'Neo-Brutalism', color: 'bg-[#FFE4A0] text-black border-2 border-black' },
+                                            { key: 'glassmorphism', label: 'Glassmorphism', color: 'bg-white/20 backdrop-blur text-white border-white/30' },
+                                            { key: 'skeuomorphism', label: 'Skeuomorphism', color: 'bg-[#e0e5ec] text-gray-700 shadow-md' },
+                                            { key: 'claymorphism', label: 'Claymorphism', color: 'bg-white text-slate-700 shadow-lg' },
+                                            { key: 'liquidGlass', label: 'Liquid Glass', color: 'bg-white/10 backdrop-blur-xl text-white border-white/20' },
+                                        ].map(t => (
+                                            <button
+                                                key={t.key}
+                                                className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all hover:scale-105 ${t.color}`}
+                                            >
+                                                {t.label}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
+                            </section>
 
-                    {/* Add Components */}
-                    <section className="space-y-8">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
-                                <Boxes size={20} />
-                            </div>
-                            <h3 className={`text-2xl font-bold ${theme.text}`}>3. Add Components</h3>
+                            <CodeBlock theme={theme} label="Installation" code={`npx vanguard-ui add theme-switcher`} />
+
+                            <CodeBlock theme={theme} label="Usage" code={`import { useState } from 'react';
+import { themes, type Theme } from '@/styles/themes';
+
+const themeKeys = ['minimalism', 'neoBrutalism', 'glassmorphism', 
+                   'skeuomorphism', 'claymorphism', 'liquidGlass'];
+
+export function ThemeSwitcher({ onThemeChange }: { onThemeChange: (theme: Theme) => void }) {
+  const [activeTheme, setActiveTheme] = useState('minimalism');
+  
+  const handleSwitch = (key: string) => {
+    setActiveTheme(key);
+    onThemeChange(themes[key as keyof typeof themes]);
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {themeKeys.map(key => (
+        <button
+          key={key}
+          onClick={() => handleSwitch(key)}
+          className={\`px-3 py-1.5 rounded-lg text-sm font-medium transition-all
+            \${activeTheme === key ? 'bg-indigo-500 text-white' : 'bg-black/5 hover:bg-black/10'}\`}
+        >
+          {key}
+        </button>
+      ))}
+    </div>
+  );
+}`} />
+
+                            <CodeBlock theme={theme} label="CLI: Set Default Theme" code={`# Set your project's default aesthetic
+npx vanguard-ui theme --set glassmorphism
+
+# Available options:
+# minimalism, neoBrutalism, glassmorphism, 
+# skeuomorphism, claymorphism, liquidGlass`} />
                         </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Start by adding themed, reality-aware components directly into your codebase.</p>
-                        <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
-                            <PkgManagerTabs />
-                            <div className="p-5 bg-black/90 relative group">
-                                <div className="flex flex-col gap-1.5">
-                                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Command: Add Component</span>
-                                    <code className="text-indigo-300 font-mono text-sm">{addCommands[pkgManager]}</code>
+                    </>
+                )}
+
+                {/* Component Sections */}
+                {activeSection === 'button' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Button</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>A theme-aware button component with multiple variants.</p>
+                        </div>
+                        <div className="space-y-8">
+                            <CodeBlock theme={theme} label="Installation" code={`npx vanguard-ui add button`} />
+                            <CodeBlock theme={theme} label="Usage" code={`import { Button } from '@/components/ui/Button';
+
+<Button theme={theme}>Primary</Button>
+<Button theme={theme} variant="secondary">Secondary</Button>
+<Button theme={theme} variant="accent">Accent</Button>`} />
+                        </div>
+                    </>
+                )}
+
+                {activeSection === 'card' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Card</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>A versatile container component with header, content, and footer.</p>
+                        </div>
+                        <div className="space-y-8">
+                            <CodeBlock theme={theme} label="Installation" code={`npx vanguard-ui add card`} />
+                            <CodeBlock theme={theme} label="Usage" code={`import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+
+<Card theme={theme}>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+  </CardHeader>
+  <CardContent>
+    Your content here
+  </CardContent>
+</Card>`} />
+                        </div>
+                    </>
+                )}
+
+                {activeSection === 'input' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Input</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Theme-aware text input for forms and user interaction.</p>
+                        </div>
+                        <div className="space-y-8">
+                            <CodeBlock theme={theme} label="Installation" code={`npx vanguard-ui add input`} />
+                            <CodeBlock theme={theme} label="Usage" code={`import { Input } from '@/components/ui/Form';
+
+<Input theme={theme} placeholder="Enter text..." />
+<Input theme={theme} type="email" placeholder="Email" />`} />
+                        </div>
+                    </>
+                )}
+
+                {activeSection === 'badge' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Badge</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Small labels for status indicators and tags.</p>
+                        </div>
+                        <div className="space-y-8">
+                            <CodeBlock theme={theme} label="Installation" code={`npx vanguard-ui add badge`} />
+                            <CodeBlock theme={theme} label="Usage" code={`import { Badge } from '@/components/ui/Badge';
+
+<Badge theme={theme}>Default</Badge>
+<Badge theme={theme} variant="secondary">Secondary</Badge>
+<Badge theme={theme} variant="accent">New</Badge>`} />
+                        </div>
+                    </>
+                )}
+
+                {activeSection === 'more' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Components</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>More Components</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Explore our full library of 44+ components.</p>
+                        </div>
+                        <div className="space-y-8">
+                            <p className={`opacity-70 ${theme.text}`}>Visit the <strong>Library</strong> page to explore all available components with live previews.</p>
+                            <CodeBlock theme={theme} label="Add Any Component" code={`npx vanguard-ui add [component-name]
+
+# Examples:
+npx vanguard-ui add dialog
+npx vanguard-ui add tabs
+npx vanguard-ui add tooltip
+npx vanguard-ui add calendar`} />
+                        </div>
+                    </>
+                )}
+
+                {/* Installation Section (default) */}
+                {activeSection === 'installation' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Guides</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Installation</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>The fastest way to get started is using our CLI to set up your design system.</p>
+                        </div>
+
+                        <div className="space-y-16">
+                            {/* CLI Installation */}
+                            <section className="space-y-8">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
+                                        <Terminal size={20} />
+                                    </div>
+                                    <h3 className={`text-2xl font-bold ${theme.text}`}>1. Install CLI</h3>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Install the Vanguard CLI using your preferred package manager.</p>
+                                <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
+                                    <PkgManagerTabs />
+                                    <CodeBlock theme={theme} label="Command: Install CLI" code={cliCommands[pkgManager]} />
+                                </div>
+                            </section>
 
-                    {/* Manual Installation */}
-                    <div className={`h-px w-full bg-gray-200/10 my-12`} />
-                    <h2 className={`text-3xl font-black ${theme.text}`}>Manual Installation</h2>
-                    <p className={`opacity-60 font-medium ${theme.text} -mt-4`}>If you prefer full control, follow these steps to integrate Vanguard into your existing project.</p>
+                            {/* Initialize Project */}
+                            <section className="space-y-8">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
+                                        <Settings2 size={20} />
+                                    </div>
+                                    <h3 className={`text-2xl font-bold ${theme.text}`}>2. Initialize Project</h3>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Setup your project's config, global CSS, and theme-system variables.</p>
+                                <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
+                                    <PkgManagerTabs />
+                                    <CodeBlock theme={theme} label="Command: Init" code={initCommands[pkgManager]} />
+                                </div>
+                            </section>
 
-                    {/* 1. Install Dependencies */}
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>1</div>
-                            <h4 className={`text-lg font-bold ${theme.text}`}>Install Dependencies</h4>
-                        </div>
-                        <CodeBlock theme={theme} label="Command: Install Packages" code={depsCommands[pkgManager]} />
-                    </section>
+                            {/* Set Theme/Aesthetic */}
+                            <section className="space-y-8">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
+                                        <Palette size={20} />
+                                    </div>
+                                    <h3 className={`text-2xl font-bold ${theme.text}`}>3. Choose Your Aesthetic</h3>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Select a design aesthetic for your project. Available options: <code className="bg-black/10 px-1 rounded">minimalism</code>, <code className="bg-black/10 px-1 rounded">neoBrutalism</code>, <code className="bg-black/10 px-1 rounded">glassmorphism</code>, <code className="bg-black/10 px-1 rounded">skeuomorphism</code>, <code className="bg-black/10 px-1 rounded">claymorphism</code>, <code className="bg-black/10 px-1 rounded">liquidGlass</code></p>
+                                <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
+                                    <PkgManagerTabs />
+                                    <CodeBlock theme={theme} label="Command: Set Aesthetic" code={themeCommands[pkgManager]} />
+                                </div>
+                            </section>
 
-                    {/* 2. Setup Path Aliases */}
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>2</div>
-                            <h4 className={`text-lg font-bold ${theme.text}`}>Setup Path Aliases</h4>
-                        </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Point your project's imports to <code className="bg-black/10 px-1 rounded">@/</code> for cleaner code.</p>
-                        <CodeBlock theme={theme} label="Config: vite.config.ts" code={`import { defineConfig } from 'vite'
+                            {/* Add Components */}
+                            <section className="space-y-8">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-current opacity-20 ${theme.text}`}>
+                                        <Boxes size={20} />
+                                    </div>
+                                    <h3 className={`text-2xl font-bold ${theme.text}`}>4. Add Components</h3>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Start by adding themed, reality-aware components directly into your codebase.</p>
+                                <div className={`rounded-2xl border border-gray-200/10 overflow-hidden ${theme.card}`}>
+                                    <PkgManagerTabs />
+                                    <CodeBlock theme={theme} label="Command: Add Component" code={addCommands[pkgManager]} />
+                                </div>
+                            </section>
+
+                            {/* Manual Installation */}
+                            <div className={`h-px w-full bg-gray-200/10 my-12`} />
+                            <h2 className={`text-3xl font-black ${theme.text}`}>Manual Installation</h2>
+                            <p className={`opacity-60 font-medium ${theme.text} -mt-4`}>If you prefer full control, follow these steps to integrate Vanguard into your existing project.</p>
+
+                            {/* 1. Install Dependencies */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>1</div>
+                                    <h4 className={`text-lg font-bold ${theme.text}`}>Install Dependencies</h4>
+                                </div>
+                                <CodeBlock theme={theme} label="Command: Install Packages" code={depsCommands[pkgManager]} />
+                            </section>
+
+                            {/* 2. Setup Path Aliases */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>2</div>
+                                    <h4 className={`text-lg font-bold ${theme.text}`}>Setup Path Aliases</h4>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Point your project's imports to <code className="bg-black/10 px-1 rounded">@/</code> for cleaner code.</p>
+                                <CodeBlock theme={theme} label="Config: vite.config.ts" code={`import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
@@ -271,82 +656,84 @@ export default defineConfig({
     },
   },
 })`} />
-                    </section>
+                            </section>
 
-                    {/* 3. Tailwind CSS / PostCSS Configuration */}
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>3</div>
-                            <h4 className={`text-lg font-bold ${theme.text}`}>Tailwind CSS / PostCSS Configuration</h4>
-                        </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Ensure your <code className="bg-black/10 px-1 rounded">postcss.config.js</code> and CSS entry point are correct.</p>
-                        <CodeBlock theme={theme} label="Config: postcss.config.js" code={`export default {
+                            {/* 3. Tailwind CSS / PostCSS Configuration */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>3</div>
+                                    <h4 className={`text-lg font-bold ${theme.text}`}>Tailwind CSS / PostCSS Configuration</h4>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Ensure your <code className="bg-black/10 px-1 rounded">postcss.config.js</code> and CSS entry point are correct.</p>
+                                <CodeBlock theme={theme} label="Config: postcss.config.js" code={`export default {
   plugins: {
     '@tailwindcss/postcss': {},
   },
 }`} />
-                        <CodeBlock theme={theme} label="Config: src/index.css" code={`@import "tailwindcss";
+                                <CodeBlock theme={theme} label="Config: src/index.css" code={`@import "tailwindcss";
 
 @layer base {
   body {
     /* your base theme styles */
   }
 }`} />
-                    </section>
+                            </section>
 
-                    {/* 4. Create Utility Function */}
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>4</div>
-                            <h4 className={`text-lg font-bold ${theme.text}`}>Create Utility Function</h4>
-                        </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Create a helper to merge Tailwind classes effectively.</p>
-                        <CodeBlock theme={theme} label="Config: src/lib/utils.ts" code={`import { clsx, type ClassValue } from 'clsx';
+                            {/* 4. Create Utility Function */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>4</div>
+                                    <h4 className={`text-lg font-bold ${theme.text}`}>Create Utility Function</h4>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Create a helper to merge Tailwind classes effectively.</p>
+                                <CodeBlock theme={theme} label="Config: src/lib/utils.ts" code={`import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }`} />
-                    </section>
+                            </section>
 
-                    {/* 5. Usage */}
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>5</div>
-                            <h4 className={`text-lg font-bold ${theme.text}`}>Usage</h4>
-                        </div>
-                        <p className={`opacity-60 font-medium ${theme.text}`}>Import components, pass a theme, and build something amazing.</p>
-                        <CodeBlock theme={theme} label="Usage: App.tsx" code={`import { themes } from '@/styles/themes';
+                            {/* 5. Usage */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 font-bold text-sm ${theme.text}`}>5</div>
+                                    <h4 className={`text-lg font-bold ${theme.text}`}>Usage</h4>
+                                </div>
+                                <p className={`opacity-60 font-medium ${theme.text}`}>Import components, pass a theme, and build something amazing.</p>
+                                <CodeBlock theme={theme} label="Usage: App.tsx" code={`import { themes } from '@/styles/themes';
 import { Button } from '@/components/ui/Button';
 
 export default function App() {
   return <Button theme={themes.neoBrutalism}>Vanguard UI</Button>;
 }`} />
-                    </section>
+                            </section>
 
-                    {/* How to use CLI Assets */}
-                    <section className={`p-8 rounded-3xl ${theme.card} space-y-4`}>
-                        <div className="flex items-center gap-2">
-                            <Palette size={20} className="opacity-50" />
-                            <h4 className={`font-bold ${theme.text}`}>How to use CLI Assets</h4>
+                            {/* How to use CLI Assets */}
+                            <section className={`p-8 rounded-3xl ${theme.card} space-y-4`}>
+                                <div className="flex items-center gap-2">
+                                    <Palette size={20} className="opacity-50" />
+                                    <h4 className={`font-bold ${theme.text}`}>How to use CLI Assets</h4>
+                                </div>
+                                <p className={`text-sm opacity-60 ${theme.text}`}>
+                                    Our components often use pre-built styles defined in CSS like the <code className="bg-black/10 px-1 rounded">Slider</code> or <code className="bg-black/10 px-1 rounded">TactileKnob</code>.
+                                </p>
+                                <ul className={`list-disc list-inside text-sm opacity-60 space-y-1 ${theme.text}`}>
+                                    <li><strong>Copy the Code:</strong> Go to the component preview and copy the entire component file.</li>
+                                    <li><strong>Install Deps:</strong> Run the "Install" button to see which additional packages you might need.</li>
+                                    <li><strong>Add to Project:</strong> Paste into your <code className="bg-black/10 px-1 rounded">components/ui</code> directory.</li>
+                                </ul>
+                            </section>
+
+                            {/* Tip callout */}
+                            <section className={`p-6 rounded-2xl border-l-4 border-indigo-500 bg-indigo-500/5`}>
+                                <p className={`text-sm ${theme.text}`}>
+                                    <strong>💡 Pro Tip:</strong> The components automatically adapt to your <code className="bg-black/10 px-1 rounded">theme</code> object. Switch between 6 design realities instantly by changing the theme prop!
+                                </p>
+                            </section>
                         </div>
-                        <p className={`text-sm opacity-60 ${theme.text}`}>
-                            Our components often use pre-built styles defined in CSS like the <code className="bg-black/10 px-1 rounded">Slider</code> or <code className="bg-black/10 px-1 rounded">TactileKnob</code>.
-                        </p>
-                        <ul className={`list-disc list-inside text-sm opacity-60 space-y-1 ${theme.text}`}>
-                            <li><strong>Copy the Code:</strong> Go to the component preview and copy the entire component file.</li>
-                            <li><strong>Install Deps:</strong> Run the "Install" button to see which additional packages you might need.</li>
-                            <li><strong>Add to Project:</strong> Paste into your <code className="bg-black/10 px-1 rounded">components/ui</code> directory.</li>
-                        </ul>
-                    </section>
-
-                    {/* Tip callout */}
-                    <section className={`p-6 rounded-2xl border-l-4 border-indigo-500 bg-indigo-500/5`}>
-                        <p className={`text-sm ${theme.text}`}>
-                            <strong>💡 Pro Tip:</strong> The components automatically adapt to your <code className="bg-black/10 px-1 rounded">theme</code> object. Switch between 6 design realities instantly by changing the theme prop!
-                        </p>
-                    </section>
-                </div>
+                    </>
+                )}
             </main>
         </div>
     );

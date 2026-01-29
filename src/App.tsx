@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LayoutGrid, Palette, ArrowRight, Github } from 'lucide-react';
+import { LayoutGrid, Palette, Github } from 'lucide-react';
 import type { Theme } from './styles/themes';
 import { themes } from './styles/themes';
 import { LandingPage } from './pages/LandingPage';
@@ -42,6 +42,7 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
         </ul>
       </div>
 
+      {/* Newsletter - commented out for now
       <div className="col-span-1 md:col-span-3 space-y-6">
         <h4 className={`text-sm font-black uppercase tracking-widest ${theme.text}`}>Newsletter</h4>
         <p className={`text-sm opacity-80 ${theme.text}`}>Get the latest design insights.</p>
@@ -50,6 +51,7 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
           <button className={`p-2 rounded-lg bg-indigo-500 text-white hover:brightness-110 active:scale-95 transition-all`}><ArrowRight size={18} /></button>
         </div>
       </div>
+      */}
     </div>
     <div className={`max-w-7xl mx-auto mt-20 pt-8 border-t border-current opacity-40 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest ${theme.text}`}>
       <div className="flex items-center gap-6">
