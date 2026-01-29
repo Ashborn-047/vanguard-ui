@@ -23,15 +23,22 @@ Vanguard UI is a professional, multi-aesthetic React component library designed 
 
 ## 📦 Installation
 
+Vanguard UI is designed to be integrated into your project seamlessly.
+
+### 1. CLI Installation (Recommended)
+Add any component to your project instantly using our CLI:
+
 ```bash
-# Clone the repository
-git clone https://github.com/Ashborn-047/vanguard-ui.git
+# Add a component (e.g., button)
+npx vanguard-ui add button
+```
 
-# Install dependencies
-npm install
+### 2. Manual Setup
+If you prefer manual control, install the core primitives and copy the component code:
 
-# Start the dev server
-npm run dev
+```bash
+# Install core dependencies
+npm install lucide-react tailwind-merge clsx framer-motion
 ```
 
 ## 🛠️ Tech Stack
