@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Terminal, Boxes, Settings2, Palette, Copy, Check, ChevronRight } from 'lucide-react';
 import type { Theme } from '../styles/themes';
+import { ThemeToggle1, ThemeToggle2, ThemeToggle3, ThemeToggle4, ThemeToggle5 } from '../components/ui/ThemeToggle';
 
 export const DocumentationPage: React.FC<{ theme: Theme }> = ({ theme }) => (
     <div className="py-20 px-6 max-w-4xl mx-auto animate-in fade-in duration-500 min-h-screen">
@@ -76,6 +77,7 @@ const sidebarItems = [
         title: 'Core Concepts',
         items: [
             { id: 'themes', label: 'Themes & Aesthetics' },
+            { id: 'dark-light-mode', label: 'Dark & Light Mode' },
             { id: 'color-customization', label: 'Color Customization' },
             { id: 'utilities', label: 'Utility Functions' },
         ]
@@ -96,6 +98,14 @@ const sidebarItems = [
 export const IntegrationPage: React.FC<{ theme: Theme }> = ({ theme }) => {
     const [pkgManager, setPkgManager] = React.useState('npm');
     const [activeSection, setActiveSection] = React.useState('installation');
+    // Independent states for the 5 toggle buttons
+    const [toggleStates, setToggleStates] = React.useState([false, false, false, false, false]);
+
+    const handleToggle = (index: number) => {
+        const newStates = [...toggleStates];
+        newStates[index] = !newStates[index];
+        setToggleStates(newStates);
+    };
 
     const cliCommands: Record<string, string> = {
         npm: 'npx vanguard-ui',
@@ -255,6 +265,109 @@ const myTheme = themes.glassmorphism;
 // Pass to components
 <Button theme={myTheme}>Click Me</Button>
 <Card theme={myTheme}>Content</Card>`} />
+                            </section>
+                        </div>
+                    </>
+                )}
+
+                {/* Dark & Light Mode Section */}
+                {activeSection === 'dark-light-mode' && (
+                    <>
+                        <div className="mb-12">
+                            <p className={`text-xs uppercase tracking-widest opacity-40 mb-3 ${theme.text}`}>Core Concepts</p>
+                            <h1 className={`text-5xl md:text-6xl font-black mb-6 ${theme.text} tracking-tight`}>Dark & Light Mode</h1>
+                            <p className={`text-xl opacity-60 font-medium ${theme.text}`}>Every aesthetic supports both dark and light modes.</p>
+                        </div>
+                        <div className="space-y-12">
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Auto-Detect System Preference</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    Vanguard UI automatically detects your user's system preference and applies the appropriate mode.
+                                    Users can still toggle manually, and their preference is saved to localStorage.
+                                </p>
+                                <CodeBlock theme={theme} label="System Preference Detection" code={`// Auto-detect system preference
+const [isDarkMode, setIsDarkMode] = useState(() => {
+  // Check localStorage first
+  const saved = localStorage.getItem('vanguard-dark-mode');
+  if (saved !== null) return saved === 'true';
+  
+  // Fall back to system preference
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+});`} />
+                            </section>
+
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Using getTheme()</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    The <code className="bg-black/10 px-1 rounded">getTheme()</code> function returns the appropriate theme variant based on mode.
+                                </p>
+                                <CodeBlock theme={theme} label="getTheme API" code={`import { getTheme } from '@/styles/themes';
+
+// Get theme with mode applied
+const theme = getTheme('minimalism', 'dark');  // Returns dark minimalism
+const theme = getTheme('minimalism', 'light'); // Returns light minimalism
+
+// Special case: Liquid Glass (originally dark)
+getTheme('liquidGlass', 'dark');  // Returns original dark
+getTheme('liquidGlass', 'light'); // Returns frosted light variant`} />
+                            </section>
+
+                            <section className="space-y-4">
+                                <h2 className={`text-xl font-bold ${theme.text}`}>Live Preview</h2>
+                                <div className={`p-8 rounded-2xl ${theme.card} flex flex-col items-center gap-6`}>
+                                    <p className={`text-sm opacity-60 mb-2 ${theme.text}`}>Click to toggle state:</p>
+                                    <div className="flex flex-wrap gap-8 items-center justify-center p-4">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle1 isDark={toggleStates[0]} onToggle={() => handleToggle(0)} className="w-12 h-12 p-1" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Yin-Yang</span>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle2 isDark={toggleStates[1]} onToggle={() => handleToggle(1)} className="w-12 h-12 p-3" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Classic</span>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle3 isDark={toggleStates[2]} onToggle={() => handleToggle(2)} className="w-12 h-12 p-3" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Eclipse</span>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle4 isDark={toggleStates[3]} onToggle={() => handleToggle(3)} className="w-12 h-12 p-3" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Bulb</span>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle5 isDark={toggleStates[4]} onToggle={() => handleToggle(4)} className="w-12 h-12 p-3" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Simple</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="space-y-4">
+                                <h2 className={`text-2xl font-bold ${theme.text}`}>Toggle Button Components</h2>
+                                <p className={`opacity-70 leading-relaxed ${theme.text}`}>
+                                    We provide 5 animated toggle button variants. Choose the one that fits your aesthetic.
+                                </p>
+                                <CodeBlock theme={theme} label="Installation" code={`npm install framer-motion  # Required for animations
+npx vanguard-ui add theme-toggle`} />
+                                <CodeBlock theme={theme} label="Available Toggles" code={`import { 
+  ThemeToggle1,  // Yin-Yang rotating toggle
+  ThemeToggle2,  // Classic sun/moon with rays 
+  ThemeToggle3,  // Sun with circle rays
+  ThemeToggle4,  // Lightbulb with filament
+  ThemeToggle5,  // Simple eclipse/moon
+} from '@/components/ui/ThemeToggle';
+
+// Usage
+<ThemeToggle2 
+  isDark={isDarkMode} 
+  onToggle={() => setIsDarkMode(!isDarkMode)}
+  className="w-10 h-10 p-2"
+/>`} />
+                            </section>
+
+                            <section className={`p-6 rounded-2xl border-l-4 border-indigo-500 bg-indigo-500/5`}>
+                                <p className={`text-sm ${theme.text}`}>
+                                    <strong>💡 Tip:</strong> The toggle buttons use Framer Motion for smooth animations. Make sure to install it as a peer dependency.
+                                </p>
                             </section>
                         </div>
                     </>

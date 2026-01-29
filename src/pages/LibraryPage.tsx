@@ -3,6 +3,7 @@ import { Search, Menu, X, LayoutGrid, Plus, Search as SearchIcon } from 'lucide-
 import type { Theme } from '../styles/themes';
 import { libraryStructure } from '../data/library';
 import { Showcase } from '../components/Showcase';
+import { ThemeToggle2 } from '../components/ui/ThemeToggle';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Input } from '../components/ui/Input';
@@ -28,9 +29,11 @@ function cn(...inputs: ClassValue[]) {
 interface LibraryPageProps {
     theme: Theme;
     currentThemeKey: string;
+    isDarkMode?: boolean;
+    onToggleDarkMode?: () => void;
 }
 
-export const LibraryPage: React.FC<LibraryPageProps> = ({ theme, currentThemeKey }) => {
+export const LibraryPage: React.FC<LibraryPageProps> = ({ theme, currentThemeKey, isDarkMode, onToggleDarkMode }) => {
     const [activeComponent, setActiveComponent] = useState('button');
     const [sidebarSearch, setSidebarSearch] = useState('');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -1093,7 +1096,18 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ theme, currentThemeKey
 
             {/* Content */}
             <main className="flex-1 overflow-y-auto p-6 lg:p-12 pb-32 custom-scrollbar min-h-0">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-5xl mx-auto relative group-toggle">
+                    {isDarkMode !== undefined && onToggleDarkMode && (
+                        <div className="absolute top-0 right-0 z-10 flex items-center justify-end pointer-events-none">
+                            <div className="pointer-events-auto">
+                                <ThemeToggle2
+                                    isDark={isDarkMode}
+                                    onToggle={onToggleDarkMode}
+                                    className="w-10 h-10 p-2 opacity-50 hover:opacity-100 transition-opacity bg-black/5 rounded-full backdrop-blur-sm"
+                                />
+                            </div>
+                        </div>
+                    )}
                     {renderComponentView()}
                 </div>
             </main>

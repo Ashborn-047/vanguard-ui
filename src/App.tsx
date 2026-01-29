@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { LayoutGrid, Palette, Github } from 'lucide-react';
 import type { Theme } from './styles/themes';
-import { themes } from './styles/themes';
+import { themes, getTheme } from './styles/themes';
+import { ThemeToggle2 } from './components/ui/ThemeToggle';
 import { LandingPage } from './pages/LandingPage';
 import { ContextPage } from './pages/ContextPage';
 import { LibraryPage } from './pages/LibraryPage';
@@ -69,8 +70,18 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
 export default function App() {
   const [currentThemeKey, setCurrentThemeKey] = useState('minimalism');
   const [currentView, setCurrentView] = useState('landing');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Check localStorage first
+    const saved = localStorage.getItem('vanguard-dark-mode');
+    if (saved !== null) {
+      return saved === 'true';
+    }
+    // Fall back to system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
-  const t = themes[currentThemeKey];
+  // Get theme with dark/light mode applied
+  const t = getTheme(currentThemeKey, isDarkMode ? 'dark' : 'light');
 
   const handleThemeSelect = (themeKey: string) => {
     setCurrentThemeKey(themeKey);
@@ -78,9 +89,30 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => {
+      const newValue = !prev;
+      localStorage.setItem('vanguard-dark-mode', String(newValue));
+      return newValue;
+    });
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
+
+  // Listen for system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only update if no localStorage preference is set
+      if (localStorage.getItem('vanguard-dark-mode') === null) {
+        setIsDarkMode(e.matches);
+      }
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   return (
     <div className={`
@@ -105,6 +137,13 @@ export default function App() {
             <button onClick={() => setCurrentView('library')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'library' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Library</button>
             <button onClick={() => setCurrentView('integration')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'integration' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Docs</button>
           </nav>
+
+          {/* Dark/Light Mode Toggle */}
+          <ThemeToggle2
+            isDark={isDarkMode}
+            onToggle={toggleDarkMode}
+            className="w-9 h-9 p-1.5"
+          />
 
           {/* Aesthetic Switcher Dropdown */}
           <div className="relative group">
@@ -150,7 +189,14 @@ export default function App() {
       <div className="flex-1 flex flex-col relative min-h-0">
         {currentView === 'landing' && <LandingPage currentThemeData={t} onSelectTheme={handleThemeSelect} setView={setCurrentView} />}
         {currentView === 'context' && <ContextPage theme={t} />}
-        {currentView === 'library' && <LibraryPage theme={t} currentThemeKey={currentThemeKey} />}
+        {currentView === 'library' && (
+          <LibraryPage
+            theme={t}
+            currentThemeKey={currentThemeKey}
+            isDarkMode={isDarkMode}
+            onToggleDarkMode={toggleDarkMode}
+          />
+        )}
         {currentView === 'documentation' && <DocumentationPage theme={t} />}
         {currentView === 'integration' && <IntegrationPage theme={t} />}
 
