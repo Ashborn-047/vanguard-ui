@@ -60,7 +60,7 @@ export const ContextPage: React.FC<{ theme: Theme }> = ({ theme }) => (
                                     ))}
                                 </ul>
                             </div>
-                            <div className={`p-6 rounded-2xl ${theme.name === 'Neo-Brutalism' ? 'border-2 border-black bg-[#A7F3D0]' : 'bg-black/5'}`}>
+                            <div className={`p-6 rounded-2xl ${theme.card}`}>
                                 <h3 className={`text-sm font-bold flex items-center gap-2 uppercase tracking-widest mb-2 ${theme.text}`}>
                                     <Target size={16} /> Best Used For
                                 </h3>

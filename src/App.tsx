@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LayoutGrid, Palette, ArrowRight } from 'lucide-react';
+import { LayoutGrid, Palette, ArrowRight, Github } from 'lucide-react';
 import type { Theme } from './styles/themes';
 import { themes } from './styles/themes';
 import { LandingPage } from './pages/LandingPage';
@@ -14,21 +14,19 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
         <h3 className={`text-2xl font-black flex items-center gap-3 ${theme.text}`}>
           <LayoutGrid size={28} className="text-indigo-500" /> Vanguard
         </h3>
-        <p className={`text-lg opacity-60 max-w-sm leading-relaxed ${theme.text}`}>
+        <p className={`text-lg opacity-80 max-w-sm leading-relaxed ${theme.text}`}>
           The ultimate library for theme-driven interfaces. Switch design realities at runtime and build products that feel alive.
         </p>
         <div className="flex gap-4">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className={`w-10 h-10 rounded-full border border-current opacity-20 flex items-center justify-center hover:opacity-60 cursor-pointer transition-opacity ${theme.text}`}>
-              <span className="text-[10px] font-black underline">S{i}</span>
-            </div>
-          ))}
+          <a href="https://github.com/Ashborn-047/vanguard-ui" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full border-2 border-current opacity-60 flex items-center justify-center hover:opacity-100 cursor-pointer transition-opacity ${theme.text}`}>
+            <Github size={18} />
+          </a>
         </div>
       </div>
 
       <div className="col-span-1 md:col-span-2 space-y-6">
         <h4 className={`text-sm font-black uppercase tracking-widest ${theme.text}`}>Ecosystem</h4>
-        <ul className={`space-y-3 text-sm opacity-60 font-medium ${theme.text}`}>
+        <ul className={`space-y-3 text-sm opacity-80 font-medium ${theme.text}`}>
           <li><button onClick={() => setView('library')} className="hover:opacity-100 transition-opacity">Component Lab</button></li>
           <li><button onClick={() => setView('context')} className="hover:opacity-100 transition-opacity">Philosophy</button></li>
           <li><button onClick={() => setView('landing')} className="hover:opacity-100 transition-opacity">Aesthetics</button></li>
@@ -37,7 +35,7 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
 
       <div className="col-span-1 md:col-span-2 space-y-6">
         <h4 className={`text-sm font-black uppercase tracking-widest ${theme.text}`}>Resources</h4>
-        <ul className={`space-y-3 text-sm opacity-60 font-medium ${theme.text}`}>
+        <ul className={`space-y-3 text-sm opacity-80 font-medium ${theme.text}`}>
           <li><button onClick={() => setView('documentation')} className="hover:opacity-100 transition-opacity">Documentation</button></li>
           <li><button onClick={() => setView('integration')} className="hover:opacity-100 transition-opacity">Integration</button></li>
           <li><span className="cursor-not-allowed">Changelog</span></li>
@@ -46,20 +44,20 @@ const Footer = ({ theme, setView }: { theme: Theme; setView: (v: string) => void
 
       <div className="col-span-1 md:col-span-3 space-y-6">
         <h4 className={`text-sm font-black uppercase tracking-widest ${theme.text}`}>Newsletter</h4>
-        <p className={`text-sm opacity-60 ${theme.text}`}>Get the latest design insights.</p>
+        <p className={`text-sm opacity-80 ${theme.text}`}>Get the latest design insights.</p>
         <div className="flex gap-2">
-          <input type="text" placeholder="your@email.com" className={`flex-1 px-4 py-2 rounded-lg text-sm bg-black/5 border border-current opacity-20 focus:opacity-40 outline-none transition-all ${theme.text}`} />
+          <input type="text" placeholder="your@email.com" className={`flex-1 px-4 py-2 rounded-lg text-sm bg-black/10 border border-current opacity-60 focus:opacity-100 outline-none transition-all placeholder:opacity-60 ${theme.text}`} />
           <button className={`p-2 rounded-lg bg-indigo-500 text-white hover:brightness-110 active:scale-95 transition-all`}><ArrowRight size={18} /></button>
         </div>
       </div>
     </div>
-    <div className={`max-w-7xl mx-auto mt-20 pt-8 border-t border-current opacity-10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest ${theme.text}`}>
+    <div className={`max-w-7xl mx-auto mt-20 pt-8 border-t border-current opacity-40 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest ${theme.text}`}>
       <div className="flex items-center gap-6">
         <span>© 2026 Vanguard UI Inc.</span>
-        <span className="opacity-40">Privacy</span>
-        <span className="opacity-40">Terms</span>
+        <span className="opacity-70">Privacy</span>
+        <span className="opacity-70">Terms</span>
       </div>
-      <span className="opacity-60 flex items-center gap-2">
+      <span className="opacity-90 flex items-center gap-2">
         Built for the future <span className="text-red-500 leading-none text-base">✦</span>
       </span>
     </div>
@@ -128,8 +126,8 @@ export default function App() {
                       key={key}
                       onClick={() => setCurrentThemeKey(key)}
                       className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-3 ${currentThemeKey === key
-                          ? 'bg-indigo-500/20 text-indigo-500'
-                          : `opacity-70 hover:opacity-100 hover:bg-black/5 ${t.text}`
+                        ? 'bg-indigo-500/20 text-indigo-500'
+                        : `opacity-70 hover:opacity-100 hover:bg-black/5 ${t.text}`
                         }`}
                     >
                       <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${currentThemeKey === key ? 'border-indigo-500' : 'border-current opacity-30'

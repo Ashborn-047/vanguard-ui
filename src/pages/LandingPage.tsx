@@ -52,9 +52,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ currentThemeData, onSe
                 Vanguard v2.0
             </div>
 
-            <h1 className={`text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9] ${currentThemeData.text}`}>
+            <h1 className={`text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9] drop-shadow-lg ${currentThemeData.text}`}>
                 Design that <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+                <span
+                    className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"
+                    style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}
+                >
                     Adapts to Reality.
                 </span>
             </h1>
@@ -76,7 +79,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ currentThemeData, onSe
                 </button>
                 <button
                     onClick={() => setView('context')}
-                    className={`px-8 py-4 rounded-xl font-bold border transition-all hover:bg-black/5 dark:hover:bg-white/5 border-current opacity-60 hover:opacity-100 ${currentThemeData.text}`}
+                    className={`px-8 py-4 rounded-xl font-bold transition-all hover:-translate-y-1 ${currentThemeData.secondaryButton}`}
                 >
                     Design Philosophy
                 </button>
