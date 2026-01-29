@@ -96,23 +96,53 @@ export default function App() {
             <LayoutGrid className="w-6 h-6" />
             Vanguard
           </h1>
+        </div>
+
+        <div className="flex items-center gap-6">
           <nav className="hidden md:flex gap-4">
             <button onClick={() => setCurrentView('landing')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'landing' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Home</button>
             <button onClick={() => setCurrentView('context')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'context' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Philosophy</button>
             <button onClick={() => setCurrentView('library')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'library' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Library</button>
+            <button onClick={() => setCurrentView('integration')} className={`text-sm font-medium transition-opacity hover:opacity-100 ${currentView === 'integration' ? `opacity-100 font-bold ${t.text}` : `opacity-60 ${t.text}`}`}>Docs</button>
           </nav>
-        </div>
 
-        <div className="flex items-center gap-4">
-          {currentView === 'library' && (
+          {/* Aesthetic Switcher Dropdown */}
+          <div className="relative group">
             <button
-              onClick={() => setCurrentView('landing')}
               className={`text-xs font-bold px-4 py-2 rounded-full border border-current flex items-center gap-2 hover:opacity-80 transition-opacity ${t.text}`}
             >
               <Palette size={14} />
-              Change Aesthetic
+              <span className="hidden sm:inline">{t.name}</span>
+              <span className="sm:hidden">Theme</span>
             </button>
-          )}
+
+            {/* Dropdown */}
+            <div className="absolute right-0 top-full mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className={`rounded-2xl border border-gray-200/20 shadow-2xl overflow-hidden backdrop-blur-xl ${t.card}`}>
+                <div className="p-3 border-b border-gray-200/10">
+                  <p className={`text-[10px] font-black uppercase tracking-widest opacity-40 ${t.text}`}>Select Aesthetic</p>
+                </div>
+                <div className="p-2 space-y-1">
+                  {Object.entries(themes).map(([key, themeData]) => (
+                    <button
+                      key={key}
+                      onClick={() => setCurrentThemeKey(key)}
+                      className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-3 ${currentThemeKey === key
+                          ? 'bg-indigo-500/20 text-indigo-500'
+                          : `opacity-70 hover:opacity-100 hover:bg-black/5 ${t.text}`
+                        }`}
+                    >
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${currentThemeKey === key ? 'border-indigo-500' : 'border-current opacity-30'
+                        }`}>
+                        {currentThemeKey === key && <div className="w-2 h-2 rounded-full bg-indigo-500" />}
+                      </div>
+                      {themeData.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
