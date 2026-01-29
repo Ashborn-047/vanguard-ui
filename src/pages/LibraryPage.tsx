@@ -951,6 +951,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ theme, currentThemeKey
                         </div>
                     </Showcase>
                 );
+            case 'chart':
             case 'charts':
                 return (
                     <Showcase
@@ -967,6 +968,55 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ theme, currentThemeKey
                                     style={{ height: `${h}%`, opacity: (i + 1) / 12 }}
                                 />
                             ))}
+                        </div>
+                    </Showcase>
+                );
+            case 'date-picker':
+                return (
+                    <Showcase
+                        theme={theme}
+                        title="Date Picker"
+                        description="A date picker built on top of the Calendar component."
+                        code={`<DatePicker theme={theme} />`}
+                    >
+                        <div className="flex flex-col items-center gap-4">
+                            <Popover>
+                                <PopoverTrigger>
+                                    <Button theme={theme} variant="ghost" className="w-[280px] justify-start text-left font-normal">
+                                        <Lucide.Calendar className="mr-2 h-4 w-4" />
+                                        Pick a date
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent theme={theme} className="w-auto p-0">
+                                    <Calendar theme={theme} />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    </Showcase>
+                );
+            case 'sonner':
+                return (
+                    <Showcase
+                        theme={theme}
+                        title="Sonner"
+                        description="An opinionated toast component for React."
+                        code={`import { toast } from 'sonner';\ntoast('Event has been created');`}
+                    >
+                        <div className="flex flex-col items-center gap-4">
+                            <Button
+                                theme={theme}
+                                onClick={() => setToastOpen(true)}
+                            >
+                                <Lucide.Bell className="mr-2 h-4 w-4" />
+                                Show Notification
+                            </Button>
+                            <Toast
+                                theme={theme}
+                                title="Event Created"
+                                description="Sunday, December 31st at 10:00 AM"
+                                open={toastOpen}
+                                onClose={() => setToastOpen(false)}
+                            />
                         </div>
                     </Showcase>
                 );
