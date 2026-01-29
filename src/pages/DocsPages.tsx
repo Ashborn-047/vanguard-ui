@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Terminal, Boxes, Settings2, Palette, Copy, Check, ChevronRight } from 'lucide-react';
 import type { Theme } from '../styles/themes';
 import { ThemeToggle1, ThemeToggle2, ThemeToggle3, ThemeToggle4, ThemeToggle5 } from '../components/ui/ThemeToggle';
