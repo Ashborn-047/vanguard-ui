@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { Copy, Check, Code as CodeIcon } from 'lucide-react';
 import type { Theme } from '../styles/themes';
+import { ThemeToggle2 } from './ui/ThemeToggle';
+
+export const ShowcaseActionsContext = createContext<{
+    isDarkMode?: boolean;
+    onToggle?: () => void
+}>({});
 
 interface ShowcaseProps {
     title: string;
@@ -8,11 +14,17 @@ interface ShowcaseProps {
     children: React.ReactNode;
     theme: Theme;
     code?: string;
+    isDarkMode?: boolean;
+    onToggle?: () => void;
 }
 
-export const Showcase: React.FC<ShowcaseProps> = ({ title, description, children, theme, code }) => {
+export const Showcase: React.FC<ShowcaseProps> = ({ title, description, children, theme, code, isDarkMode, onToggle }) => {
     const [showCode, setShowCode] = useState(false);
     const [copied, setCopied] = useState(false);
+    const context = useContext(ShowcaseActionsContext);
+
+    const effectiveIsDark = isDarkMode ?? context.isDarkMode;
+    const effectiveOnToggle = onToggle ?? context.onToggle;
 
     const copyToClipboard = () => {
         if (code) {
@@ -23,30 +35,39 @@ export const Showcase: React.FC<ShowcaseProps> = ({ title, description, children
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-500 mb-20">
+        <div className="space-y-6 animate-in fade-in duration-500 mb-20 relative group-showcase">
             <div className="flex justify-between items-end">
                 <div className="space-y-2">
                     <h2 className={`text-3xl font-bold ${theme.text}`}>{title}</h2>
                     <p className={`text-lg opacity-70 max-w-2xl ${theme.text}`}>{description}</p>
                 </div>
-                {code && (
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setShowCode(!showCode)}
-                            className={`p-2 rounded-lg border transition-all ${theme.secondaryButton} ${showCode ? theme.accent : ''}`}
-                            title="Toggle Code View"
-                        >
-                            <CodeIcon size={18} />
-                        </button>
-                        <button
-                            onClick={copyToClipboard}
-                            className={`p-2 rounded-lg border transition-all ${theme.secondaryButton}`}
-                            title="Copy Component Code"
-                        >
-                            {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
-                        </button>
-                    </div>
-                )}
+                <div className="flex gap-2 items-center">
+                    {effectiveIsDark !== undefined && effectiveOnToggle && (
+                        <ThemeToggle2
+                            isDark={effectiveIsDark}
+                            onToggle={effectiveOnToggle}
+                            className={`w-10 h-10 p-2 rounded-lg border transition-all ${theme.secondaryButton}`}
+                        />
+                    )}
+                    {code && (
+                        <>
+                            <button
+                                onClick={() => setShowCode(!showCode)}
+                                className={`p-2 rounded-lg border transition-all ${theme.secondaryButton} ${showCode ? theme.accent : ''}`}
+                                title="Toggle Code View"
+                            >
+                                <CodeIcon size={18} />
+                            </button>
+                            <button
+                                onClick={copyToClipboard}
+                                className={`p-2 rounded-lg border transition-all ${theme.secondaryButton}`}
+                                title="Copy Component Code"
+                            >
+                                {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
 
             <div className={`p-8 md:p-12 border rounded-xl flex items-center justify-center min-h-[300px] overflow-hidden relative ${theme.card}`}>
