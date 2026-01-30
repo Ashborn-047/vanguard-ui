@@ -1,7 +1,7 @@
 import React from 'react';
 import { Terminal, Boxes, Settings2, Palette, Copy, Check, ChevronRight } from 'lucide-react';
 import type { Theme } from '../styles/themes';
-import { ThemeToggle1, ThemeToggle2, ThemeToggle3, ThemeToggle4, ThemeToggle5 } from '../components/ui/ThemeToggle';
+import { ThemeToggle1, ThemeToggle2, ThemeToggle3, ThemeToggle4, ThemeToggle5, ThemeToggle6 } from '../components/ui/ThemeToggle';
 
 export const DocumentationPage: React.FC<{ theme: Theme }> = ({ theme }) => (
     <div className="py-20 px-6 max-w-4xl mx-auto animate-in fade-in duration-500 min-h-screen">
@@ -99,7 +99,7 @@ export const IntegrationPage: React.FC<{ theme: Theme }> = ({ theme }) => {
     const [pkgManager, setPkgManager] = React.useState('npm');
     const [activeSection, setActiveSection] = React.useState('installation');
     // Independent states for the 5 toggle buttons
-    const [toggleStates, setToggleStates] = React.useState([false, false, false, false, false]);
+    const [toggleStates, setToggleStates] = React.useState([false, false, false, false, false, false]);
 
     const handleToggle = (index: number) => {
         const newStates = [...toggleStates];
@@ -337,6 +337,10 @@ getTheme('liquidGlass', 'light'); // Returns frosted light variant`} />
                                             <ThemeToggle5 isDark={toggleStates[4]} onToggle={() => handleToggle(4)} className="w-12 h-12 p-3" />
                                             <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Simple</span>
                                         </div>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <ThemeToggle6 isDark={toggleStates[5]} onToggle={() => handleToggle(5)} className="w-12 h-12 p-3" />
+                                            <span className={`text-[10px] uppercase font-bold opacity-40 ${theme.text}`}>Yin Yang 2</span>
+                                        </div>
                                     </div>
                                 </div>
                             </section>
@@ -344,7 +348,7 @@ getTheme('liquidGlass', 'light'); // Returns frosted light variant`} />
                             <section className="space-y-4">
                                 <h2 className={`text-2xl font-bold ${theme.text}`}>Toggle Button Components</h2>
                                 <p className={`opacity-70 leading-relaxed ${theme.text}`}>
-                                    We provide 5 animated toggle button variants. Choose the one that fits your aesthetic.
+                                    We provide 6 animated toggle button variants. Choose the one that fits your aesthetic.
                                 </p>
                                 <CodeBlock theme={theme} label="Installation" code={`npm install framer-motion  # Required for animations
 npx vanguard-ui add theme-toggle`} />
@@ -353,7 +357,8 @@ npx vanguard-ui add theme-toggle`} />
   ThemeToggle2,  // Classic sun/moon with rays 
   ThemeToggle3,  // Sun with circle rays
   ThemeToggle4,  // Lightbulb with filament
-  ThemeToggle5,  // Simple eclipse/moon
+   ThemeToggle5,  // Simple eclipse/moon
+  ThemeToggle6,  // Yin Yang 2 rotating toggle
 } from '@/components/ui/ThemeToggle';
 
 // Usage

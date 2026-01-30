@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
@@ -23,29 +23,29 @@ export const ThemeToggle1: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
             onClick={onToggle}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-            <svg viewBox="0 0 240 240" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-full w-full"
+            >
                 <motion.g
-                    animate={{ rotate: isDark ? -180 : 0 }}
-                    transition={{ ease: 'easeInOut', duration: 0.35 }}
+                    animate={{ rotate: isDark ? 180 : 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    style={{ originX: 0.5, originY: 0.5 }}
                 >
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+
+                    {/* Inner Circle: Right Half Filled (Black in Light Mode) */}
+                    <path d="M12 7 A 5 5 0 0 1 12 17 Z" fill="currentColor" />
+
+                    {/* Exterior Ring: Left Half Filled (Black in Light Mode) */}
                     <path
-                        d="M120 67.5C149.25 67.5 172.5 90.75 172.5 120C172.5 149.25 149.25 172.5 120 172.5"
+                        d="M12 3 A 9 9 0 0 0 12 21 L 12 17 A 5 5 0 0 1 12 7 L 12 3 Z"
                         fill="currentColor"
-                        className={isDark ? 'text-white' : 'text-slate-950'}
-                    />
-                    <path
-                        d="M120 67.5C90.75 67.5 67.5 90.75 67.5 120C67.5 149.25 90.75 172.5 120 172.5"
-                        fill="currentColor"
-                        className={isDark ? 'text-slate-950' : 'text-white'}
                     />
                 </motion.g>
-                <motion.path
-                    animate={{ rotate: isDark ? 180 : 0 }}
-                    transition={{ ease: 'easeInOut', duration: 0.35 }}
-                    d="M120 3.75C55.5 3.75 3.75 55.5 3.75 120C3.75 184.5 55.5 236.25 120 236.25C184.5 236.25 236.25 184.5 236.25 120C236.25 55.5 184.5 3.75 120 3.75ZM120 214.5V172.5C90.75 172.5 67.5 149.25 67.5 120C67.5 90.75 90.75 67.5 120 67.5V25.5C172.5 25.5 214.5 67.5 214.5 120C214.5 172.5 172.5 214.5 120 214.5Z"
-                    fill="currentColor"
-                    className={isDark ? 'text-white' : 'text-slate-950'}
-                />
             </svg>
         </button>
     );
@@ -55,6 +55,7 @@ export const ThemeToggle1: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
  * Classic sun/moon toggle with rays
  */
 export const ThemeToggle2: React.FC<ThemeToggleProps> = ({ isDark, onToggle, className = '' }) => {
+    const id = useId();
     return (
         <button
             type="button"
@@ -74,14 +75,14 @@ export const ThemeToggle2: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
                 viewBox="0 0 32 32"
                 className="w-full h-full"
             >
-                <clipPath id="theme-toggle-2">
+                <clipPath id={`theme-toggle-2-${id}`}>
                     <motion.path
                         animate={{ y: isDark ? 10 : 0, x: isDark ? -12 : 0 }}
                         transition={{ ease: 'easeInOut', duration: 0.35 }}
                         d="M0-5h30a1 1 0 0 0 9 13v24H0Z"
                     />
                 </clipPath>
-                <g clipPath="url(#theme-toggle-2)">
+                <g clipPath={`url(#theme-toggle-2-${id})`}>
                     <motion.circle
                         animate={{ r: isDark ? 10 : 8 }}
                         transition={{ ease: 'easeInOut', duration: 0.35 }}
@@ -117,6 +118,7 @@ export const ThemeToggle2: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
  * Sun with circle rays toggle
  */
 export const ThemeToggle3: React.FC<ThemeToggleProps> = ({ isDark, onToggle, className = '' }) => {
+    const id = useId();
     return (
         <button
             type="button"
@@ -136,14 +138,14 @@ export const ThemeToggle3: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
                 viewBox="0 0 32 32"
                 className="w-full h-full"
             >
-                <clipPath id="theme-toggle-3">
+                <clipPath id={`theme-toggle-3-${id}`}>
                     <motion.path
                         animate={{ y: isDark ? 14 : 0, x: isDark ? -11 : 0 }}
                         transition={{ ease: 'easeInOut', duration: 0.35 }}
                         d="M0-11h25a1 1 0 0017 13v30H0Z"
                     />
                 </clipPath>
-                <g clipPath="url(#theme-toggle-3)">
+                <g clipPath={`url(#theme-toggle-3-${id})`}>
                     <motion.circle
                         animate={{ r: isDark ? 10 : 8 }}
                         transition={{ ease: 'easeInOut', duration: 0.35 }}
@@ -231,6 +233,7 @@ export const ThemeToggle4: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
  * Simple eclipse/moon toggle
  */
 export const ThemeToggle5: React.FC<ThemeToggleProps> = ({ isDark, onToggle, className = '' }) => {
+    const id = useId();
     return (
         <button
             type="button"
@@ -249,16 +252,64 @@ export const ThemeToggle5: React.FC<ThemeToggleProps> = ({ isDark, onToggle, cla
                 viewBox="0 0 32 32"
                 className="w-full h-full"
             >
-                <clipPath id="theme-toggle-5">
+                <clipPath id={`theme-toggle-5-${id}`}>
                     <motion.path
                         animate={{ y: isDark ? 5 : 0, x: isDark ? -20 : 0 }}
                         transition={{ ease: 'easeInOut', duration: 0.35 }}
                         d="M0-5h55v37h-55zm32 12a1 1 0 0025 0 1 1 0 00-25 0"
                     />
                 </clipPath>
-                <g clipPath="url(#theme-toggle-5)">
+                <g clipPath={`url(#theme-toggle-5-${id})`}>
                     <circle cx="16" cy="16" r="15" />
                 </g>
+            </svg>
+        </button>
+    );
+};
+
+export const ThemeToggle6: React.FC<ThemeToggleProps> = ({ isDark, onToggle, className = '' }) => {
+    return (
+        <button
+            type="button"
+            className={cn(
+                "rounded-full bg-slate-950 text-white transition-all duration-300 active:scale-95",
+                isDark && "bg-white text-slate-950",
+                className
+            )}
+            onClick={onToggle}
+            aria-label="Toggle theme"
+        >
+            <svg
+                viewBox="0 0 240 240"
+                className="w-full h-full"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                {/* Rotating inner circles */}
+                <motion.g
+                    animate={{ rotate: isDark ? -180 : 0 }}
+                    transition={{ ease: "easeInOut", duration: 0.35 }}
+                >
+                    <path
+                        d="M120 67.5C149.25 67.5 172.5 90.75 172.5 120C172.5 149.25 149.25 172.5 120 172.5"
+                        fill="currentColor"
+                        className={isDark ? "text-slate-950" : "text-white"}
+                    />
+                    <path
+                        d="M120 67.5C90.75 67.5 67.5 90.75 67.5 120C67.5 149.25 90.75 172.5 120 172.5"
+                        fill="currentColor"
+                        className={isDark ? "text-white" : "text-slate-950"}
+                    />
+                </motion.g>
+
+                {/* Outer ring path */}
+                <motion.path
+                    animate={{ rotate: isDark ? 180 : 0 }}
+                    transition={{ ease: "easeInOut", duration: 0.35 }}
+                    d="M120 3.75C55.5 3.75 3.75 55.5 3.75 120C3.75 184.5 55.5 236.25 120 236.25C184.5 236.25 236.25 184.5 236.25 120C236.25 55.5 184.5 3.75 120 3.75ZM120 214.5V172.5C90.75 172.5 67.5 149.25 67.5 120C67.5 90.75 90.75 67.5 120 67.5V25.5C172.5 25.5 214.5 67.5 214.5 120C214.5 172.5 172.5 214.5 120 214.5Z"
+                    fill="currentColor"
+                    className={isDark ? "text-slate-950" : "text-white"}
+                />
             </svg>
         </button>
     );
@@ -271,6 +322,7 @@ export const ThemeToggles = {
     SunCircles: ThemeToggle3,
     Lightbulb: ThemeToggle4,
     Eclipse: ThemeToggle5,
+    YinYang2: ThemeToggle6,
 };
 
 // Default export
