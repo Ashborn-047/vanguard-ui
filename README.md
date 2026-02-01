@@ -8,13 +8,18 @@ Vanguard UI is a professional, multi-aesthetic React component library designed 
 
 - **Multi-Aesthetic Engine**: Shift between 6+ design realities at runtime.
 - **Reality Presets**:
+    - **Minimalism**: Clean lines, ample whitespace, flat colors.
     - **Neo-Brutalism**: High contrast, bold borders, raw aesthetic.
     - **Glassmorphism**: Translucency, blur effects, multi-layered depth.
-    - **Liquid Glass**: High backdrop-blur, semi-transparent white layers.
     - **Skeuomorphism**: Tactile, real-world object mimicry.
     - **Claymorphism**: Fluffy 3D shapes, soft shadows.
-    - **Minimalism**: Clean lines, ample whitespace, flat colors.
-- **Production-Ready**: A vast array of components including Navigation Menus, Tables, Drawers, OTP Inputs, and more.
+    - **Liquid Glass**: High backdrop-blur, semi-transparent white layers.
+- **Production-Ready**: A vast array of components including:
+    - **Forms**: Input, Checkbox, Radio, Select, Textarea, Combobox, InputOTP
+    - **Display**: Avatar, Progress, Skeleton, Calendar, Table
+    - **Layout**: AspectRatio, Resizable, Separator, ScrollArea
+    - **Navigation**: Breadcrumb, Pagination, Menubar, NavigationMenu
+    - **Primitives**: Badge, Button, Card, Slider, Switch, Tabs
 - **Tactile Lab**: Specialized skeuomorphic controls like Faders and Tactile Toggles.
 
 ## 🚀 Live Demo
@@ -25,16 +30,8 @@ Vanguard UI is a professional, multi-aesthetic React component library designed 
 
 Vanguard UI is designed to be integrated into your project seamlessly.
 
-### 1. CLI Installation (Recommended)
-Add any component to your project instantly using our CLI:
-
-```bash
-# Add a component (e.g., button)
-npx vanguard-ui add button
-```
-
-### 2. Manual Setup
-If you prefer manual control, install the core primitives and copy the component code:
+### Manual Setup
+Install the core primitives and copy the component code:
 
 ```bash
 # Install core dependencies
