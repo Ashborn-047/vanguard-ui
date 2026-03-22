@@ -90,9 +90,10 @@ export const Select: React.FC<{ theme: Theme; options: { value: string; label: s
     );
 };
 
-export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement> & { theme: Theme }> = ({ theme, className, ...props }) => {
+export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement> & { theme: Theme; maxLength?: number }> = ({ theme, className, maxLength = 1000, ...props }) => {
     return (
         <textarea
+            maxLength={maxLength} // 🛡️ Security: Prevent DoS via excessively long input strings
             className={cn(
                 "w-full px-4 py-3 rounded-xl border outline-none font-medium text-sm transition-all min-h-[100px]",
                 theme.input,
