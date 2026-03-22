@@ -9,14 +9,17 @@ function cn(...inputs: ClassValue[]) {
 }
 
 export const Avatar: React.FC<{ theme: Theme; src?: string; fallback: string; className?: string }> = ({ theme, src, fallback, className }) => {
+    // 🛡️ Security: Validate image source to prevent XSS via javascript:/data: URIs
+    const isSafeSrc = src && !/^(javascript|vbscript|data:text\/html)/i.test(src.trim());
+
     return (
         <div className={cn(
             "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
             theme.card,
             className
         )}>
-            {src ? (
-                <img src={src} className="aspect-square h-full w-full object-cover" />
+            {isSafeSrc ? (
+                <img src={src} className="aspect-square h-full w-full object-cover" alt={fallback} />
             ) : (
                 <div className={cn("flex h-full w-full items-center justify-center rounded-full text-xs font-bold", theme.bg)}>
                     {fallback}

@@ -1,0 +1,4 @@
+## 2024-11-20 - [Avatar Image Source XSS Prevention]
+**Vulnerability:** The `<Avatar>` component in `src/components/ui/Display.tsx` allowed unfiltered `src` properties to be passed directly to the `img` tag. While React protects against XSS in text nodes, it does not prevent `javascript:` URIs in `href` or `src` attributes. An attacker could potentially supply a `javascript:` or `data:text/html` URI as their profile picture URL.
+**Learning:** React's built-in XSS protection does not cover attribute values like `href` or `src` that expect URLs. They must be validated/sanitized manually before being rendered.
+**Prevention:** Always validate URL-based props (like `src`, `href`) to ensure they begin with safe protocols (`http://`, `https://`, `data:image/`) or are relative paths, and explicitly reject `javascript:`, `vbscript:`, and `data:text/html` protocols.
